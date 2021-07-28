@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CheckUpdate
+on:
+# Controls when the workflow will run
+   repository_dispatch:
+   workflow_dispatch:
+   schedule:
+     - cron: '* */1 * * *'
+env:
+  REPO_URL: https://downlodarchivelinux@dev.azure.com/downlodarchivelinux/X64/_git/Infinix
+  REPO_BRANCH: master
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: Run delet script
+        run: |
+          rm -rf Infinix
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git add .
+          git commit -am "Out Of Update"
+          git push origin main
+
+      - name: Run a multi-line script
+        run: |
+          git clone $REPO_URL
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git add .
+          git commit -am "fix update"
+          git push origin main
